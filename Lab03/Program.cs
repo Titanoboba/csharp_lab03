@@ -80,4 +80,51 @@ public class CarsCatalog
     }
 }
 
+public class Currency
+{
+    private int value = 100;
 
+    public virtual int Value
+    {
+        get { return this.value; }
+        set { this.value = value; }
+    }
+
+}
+
+public class CurrencyUSD : Currency
+{
+    private int course;
+
+    public int Course
+    {
+        get { return this.course; }
+        set { this.course = value; }
+    }
+
+    public override int Value
+    { 
+        get { return (base.Value * course); }
+    }
+}
+
+public class CurrencyEUR : CurrencyUSD {}
+public class CurrencyRUB : CurrencyUSD {}
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        CurrencyEUR euro = new CurrencyEUR();
+        CurrencyRUB rub = new CurrencyRUB();
+        CurrencyUSD usd = new CurrencyUSD();
+
+        rub.Course = 1;
+
+        Console.WriteLine("Input currency USD -> RUB (1 usd = ? rub)");
+        usd.Course = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Input currency EUR -> RUB");
+        euro.Course = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine($"100 Euro = {euro.Value} rubles\n100 Usd = {usd.Value} rubles\n100 Rubles = {rub.Value} rubles");
+    }
+}
