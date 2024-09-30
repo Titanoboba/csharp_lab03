@@ -40,10 +40,15 @@ struct Vector
     }
 }
 
-public class Car
+interface IEquatable<T>
 {
-    private string name, engine;
-    private int maxspeed;
+    bool Equals(T other);
+}
+
+public class Car : IEquatable<Car>
+{
+    public string name, engine;
+    public int maxspeed;
 
     Car(string name, string engine, int maxspeed)
     {
@@ -53,4 +58,26 @@ public class Car
     }
 
     public override string ToString() { return (this.name); }
+
+    public bool Equals(Car? car)
+    {
+        return (this.name, this.engine, this.maxspeed) == (car?.name, car?.engine, car?.maxspeed);
+    }
 }
+
+public class CarsCatalog
+{
+    private Car[] cars;
+
+    CarsCatalog(Car[] cars) { this.cars = cars; }
+
+    public string this[int i]
+    {
+        get
+        {
+            return ($"Name: {cars[i].name}, Engine {cars[i].engine}");
+        }
+    }
+}
+
+
