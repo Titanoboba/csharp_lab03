@@ -82,49 +82,56 @@ public class CarsCatalog
 
 public class Currency
 {
-    private int value = 100;
+    public double value { get; set; }
 
-    public virtual int Value
+    public Currency(double _value)
     {
-        get { return this.value; }
-        set { this.value = value; }
+        value = _value;
     }
 
 }
 
 public class CurrencyUSD : Currency
 {
-    private int course;
+    public CurrencyUSD(double value) : base(value) { }
 
-    public int Course
+    public static implicit operator CurrencyRUB(CurrencyUSD cusd)
     {
-        get { return this.course; }
-        set { this.course = value; }
+        return new CurrencyRUB(cusd.value * 202);
     }
 
-    public override int Value
-    { 
-        get { return (base.Value * course); }
+    public static implicit operator CurrencyEUR(CurrencyUSD cusd)
+    {
+        return new CurrencyEUR(cusd.value * 382);
     }
+
 }
 
-public class CurrencyEUR : CurrencyUSD {}
-public class CurrencyRUB : CurrencyUSD {}
-
-internal class Program
+public class CurrencyEUR : Currency 
 {
-    static void Main(string[] args)
+    public CurrencyEUR(double value) : base(value) { }
+
+    public static implicit operator CurrencyRUB(CurrencyEUR ceur)
     {
-        CurrencyEUR euro = new CurrencyEUR();
-        CurrencyRUB rub = new CurrencyRUB();
-        CurrencyUSD usd = new CurrencyUSD();
+        return new CurrencyRUB(ceur.value / 382);
+    }
 
-        rub.Course = 1;
+    public static implicit operator CurrencyUSD(CurrencyEUR cusd)
+    {
+        return new CurrencyUSD(cusd.value * 2);
+    }
+}
+public class CurrencyRUB : Currency 
+{
+    public CurrencyRUB(double value) : base(value) { }
 
-        Console.WriteLine("Input currency USD -> RUB (1 usd = ? rub)");
-        usd.Course = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Input currency EUR -> RUB");
-        euro.Course = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine($"100 Euro = {euro.Value} rubles\n100 Usd = {usd.Value} rubles\n100 Rubles = {rub.Value} rubles");
+    public static implicit operator CurrencyUSD(CurrencyRUB crub)
+    {
+        return new CurrencyUSD(crub.value * 202);
+    }
+
+    public static implicit operator CurrencyEUR(CurrencyRUB crub)
+    {
+        return new CurrencyEUR(crub.value * 382);
     }
 }
